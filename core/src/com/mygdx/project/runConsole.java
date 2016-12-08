@@ -408,7 +408,6 @@ public class runConsole {
             globalVariables.winGivenState.put(sorted, updateProb);
         } else {
             globalVariables.winGivenState.put(sorted, new Vector2(winLose, 1));
-            //System.out.println();
         }
     }
 

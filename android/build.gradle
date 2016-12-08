@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.mygdx.project"
-        minSdkVersion 8
+        minSdkVersion 24
         targetSdkVersion 24
     }
 }
