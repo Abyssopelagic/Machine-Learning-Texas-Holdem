@@ -184,6 +184,7 @@ public class GameScreen extends ApplicationAdapter {
                     handTies = false;
                     playerWins = false;
                     computerWins = false;
+                    //lolz
                 }
             }
         });
