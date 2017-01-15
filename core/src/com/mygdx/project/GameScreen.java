@@ -37,6 +37,8 @@ public class GameScreen extends ApplicationAdapter {
     Viewport viewport;
     Stage stage;
     BitmapFont font;
+    BitmapFont fontEnd;
+    BitmapFont fontEndSub;
     FreeTypeFontGenerator gen;
     FreeTypeFontGenerator.FreeTypeFontParameter param;
 
@@ -76,6 +78,10 @@ public class GameScreen extends ApplicationAdapter {
         param.size = 14;
         param.color = Color.BLACK;
         font = gen.generateFont(param);
+        param.size=80;
+        fontEnd=gen.generateFont(param);
+        param.size=40;
+        fontEndSub=gen.generateFont(param);
         gen.dispose();
 
         probAndSave = new getProbAndSave();
@@ -184,6 +190,8 @@ public class GameScreen extends ApplicationAdapter {
                     handTies = false;
                     playerWins = false;
                     computerWins = false;
+                    globalVariables.potValue = 0;
+                    globalVariables.betAmount = 0;
                 }
             }
         });
@@ -193,6 +201,7 @@ public class GameScreen extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 checkBet();
                 globalVariables.betAmount = 0;
+                globalVariables.computerAction="";
 
                 decisionState.getDecision(getPlayer(P2).player.handValue, P2);
             }
@@ -215,6 +224,7 @@ public class GameScreen extends ApplicationAdapter {
                             globalVariables.cardState = "river";
                             break;
                     }
+                    globalVariables.computerAction="";
                 }
             }
         });
@@ -227,7 +237,7 @@ public class GameScreen extends ApplicationAdapter {
 
                         raiseBet(Integer.valueOf(raiseAmount.getText()));
                         raiseAmount.setText("");
-
+                        globalVariables.computerAction="";
                         decisionState.getDecision(getPlayer(P2).player.handValue, P2);
                     }
                 }
@@ -290,7 +300,16 @@ public class GameScreen extends ApplicationAdapter {
 
         drawCards(P1);
         drawCards(P2);
-        drawTable(table);
+        if (P1.playerMoney==0&&globalVariables.cardState.equals("preflop")){
+            fontEnd.draw(batch,"Game Over",100,350);
+            fontEndSub.draw(batch,"Computer Win's",180,280);
+        } else if (P2.playerMoney==0&&globalVariables.cardState.equals("preflop")){
+            fontEnd.draw(batch,"Game Over",100,350);
+            fontEndSub.draw(batch,"Player Win's",220,280);
+        } else {
+            drawTable(table);
+        }
+
         font.draw(batch, checkHand(P1), 10, cardHeight + 70);
 
         if (table.size() == 5) {
