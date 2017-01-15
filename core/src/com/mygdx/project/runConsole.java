@@ -13,15 +13,17 @@ public class runConsole {
 
     ArrayList<Card> deck = new ArrayList<>();
     ArrayList<Card> table = new ArrayList<>();
+
     ArrayList<Card> playerPreFlop;
     ArrayList<Card> playerFlop;
     ArrayList<Card> playerTurn;
     ArrayList<Card> playerRiver;
+    ArrayList<Card> computerPreFlop;
+    ArrayList<Card> computerFlop;
+    ArrayList<Card> computerTurn;
+    ArrayList<Card> computerRiver;
 
-    ArrayList<Card> preFlopState = new ArrayList<>();
-    ArrayList<Card> flopState = new ArrayList<>();
-    ArrayList<Card> turnState = new ArrayList<>();
-    ArrayList<Card> riverState = new ArrayList<>();
+    getProbAndSave probAndSave = new getProbAndSave();
 
 
     static winTest trywin;
@@ -34,10 +36,17 @@ public class runConsole {
     public static void main(String[] args) {
         int totaldeals = 0;
         int hand = 0;
-        for (int hands = 0; hands < 10000; hands++) {
+        runConsole testing = new runConsole();
+//        testing.probAndSave.getProblist("serializedWinGivenStatePreFlop");
+//        testing.probAndSave.getProblist("serializedWinGivenStateFlop");
+//        testing.probAndSave.getProblist("serializedWinGivenStateTurn");
+//        testing.probAndSave.getProblist("serializedWinGivenStateRiver");
+        for (int hands = 0; hands < 1000; hands++) {
             //while (true) {
             //hand++;
-            runConsole testing = new runConsole();
+
+            testing = new runConsole();
+
             testing.createDeck();
             testing.createPlayers();
             testing.shuffleDeck();
@@ -47,26 +56,54 @@ public class runConsole {
 //            testing.printCards(P2.hand);
 //            System.out.println();
 
+
             testing.playerPreFlop = new ArrayList<>();
             testing.playerPreFlop.addAll(P1.hand);
-            testing.populateProbList(testing.playerPreFlop);
+            testing.computerPreFlop = new ArrayList<>();
+            testing.computerPreFlop.addAll(P2.hand);
+            winTest trywinPreFlop = new winTest(testing.playerPreFlop);
+            winTest trywinPreFlop2 = new winTest(testing.computerPreFlop);
+            trywinPreFlop.handCheck();
+            trywinPreFlop2.handCheck();
+
+            testing.probAndSave.populateProbList(testing.playerPreFlop, trywinPreFlop2.player.handValue, trywinPreFlop, trywinPreFlop2, testing.table);
 
             testing.flop();
 
             testing.playerFlop = new ArrayList<>(P1.hand);
             testing.playerFlop.addAll(testing.table);
-            testing.populateProbList(testing.playerFlop);
+            testing.computerFlop = new ArrayList<>(P2.hand);
+            testing.computerFlop.addAll(testing.table);
+            winTest trywinFlop = new winTest(testing.playerFlop);
+            winTest trywinFlop2 = new winTest(testing.computerFlop);
+            trywinFlop.handCheck();
+            trywinFlop2.handCheck();
+
+            testing.probAndSave.populateProbList(testing.playerFlop, trywinFlop2.player.handValue, trywinFlop, trywinFlop2, testing.table);
 
             testing.turnRiver();
 
             testing.playerTurn = new ArrayList<>(P1.hand);
             testing.playerTurn.addAll(testing.table);
-            testing.populateProbList(testing.playerTurn);
+            testing.computerTurn = new ArrayList<>(P2.hand);
+            testing.computerTurn.addAll(testing.table);
+            winTest trywinTurn = new winTest(testing.playerTurn);
+            winTest trywinTurn2 = new winTest(testing.computerTurn);
+            trywinTurn.handCheck();
+            trywinTurn2.handCheck();
+
+            testing.probAndSave.populateProbList(testing.playerTurn, trywinTurn2.player.handValue, trywinTurn, trywinTurn2, testing.table);
 
             testing.turnRiver();
 
             testing.playerRiver = new ArrayList<>(P1.hand);
             testing.playerRiver.addAll(testing.table);
+            testing.computerRiver = new ArrayList<>(P2.hand);
+            testing.computerRiver.addAll(testing.table);
+            winTest trywinRiver = new winTest(testing.playerRiver);
+            winTest trywinRiver2 = new winTest(testing.computerRiver);
+            trywinRiver.handCheck();
+            trywinRiver2.handCheck();
 
 
 //            testing.printCards(testing.table);
@@ -90,8 +127,7 @@ public class runConsole {
             trywin2.handCheck();
 
 
-            testing.populateProbList(testing.playerRiver);
-
+            testing.probAndSave.populateProbList(testing.playerRiver, trywinRiver2.player.handValue, trywinRiver, trywinRiver2, testing.table);
 
 //player 1 and 2
             //list amount of each card
@@ -137,6 +173,17 @@ public class runConsole {
         System.out.println(trywin2.set);
         System.out.println("High card: " + trywin2.highCard);
         System.out.println("Hand Value " + trywin2.player.handValue);
+
+
+//        testing.probAndSave.saveProblist(globalVariables.winGivenStatePreFlop, "serializedWinGivenStatePreFlop");
+//        testing.probAndSave.saveProblist(globalVariables.winGivenStateFlop, "serializedWinGivenStateFlop");
+//        testing.probAndSave.saveProblist(globalVariables.winGivenStateTurn, "serializedWinGivenStateTurn");
+//        testing.probAndSave.saveProblist(globalVariables.winGivenStateRiver, "serializedWinGivenStateRiver");
+
+        System.out.println("\n"+"winGivenStatePreFlop" + globalVariables.winGivenStatePreFlop);
+        System.out.println("winGivenStateFlop" + globalVariables.winGivenStateFlop);
+        System.out.println("winGivenStateTurn" + globalVariables.winGivenStateTurn);
+        System.out.println("winGivenStateRiver" + globalVariables.winGivenStateRiver);
 
 
         System.out.println();
@@ -310,134 +357,5 @@ public class runConsole {
         return trywin;
     }
 
-    public String whoWins() {
-        if (table.size() == 5) {
-            if (trywin.player.handValue > trywin2.player.handValue) {
-                return "player";
-            }
-            if (trywin.player.handValue < trywin2.player.handValue) {
-                return "computer";
-            }
-            if (trywin.player.handValue == trywin2.player.handValue) {
-                for (int i = 0; i < trywin.kickers.size(); i++) {
-                    if (trywin.kickers.size() > i && trywin2.kickers.size() > i) {
-                        if (trywin.kickers.get(i) > trywin2.kickers.get(i)) {
-                            return "player";
-                        }
-                        if (trywin.kickers.get(i) < trywin2.kickers.get(i)) {
-                            return "computer";
-                        }
-                    }
-                }
-                return "tie";
-            }
-        }
-        return null;
-    }
-
-    public void saveProblist(HashMap<Object, Vector2> problst) {
-        try {
-            FileOutputStream fileOut = new FileOutputStream("probabilities/serializedProbMap.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(problst);
-            out.close();
-            fileOut.close();
-            //Gdx.app.log("Serialized", "Data");
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
-    }
-
-    public HashMap<ArrayList<Card>, Vector2> getProblist() {
-        try {
-            FileInputStream fileIn = new FileInputStream("probabilities/serializedProbMap.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            globalVariables.winGivenState = (HashMap<ArrayList<Card>, Vector2>) in.readObject();
-            in.close();
-            return globalVariables.winGivenState;
-        } catch (IOException i) {
-            i.printStackTrace();
-            return null;
-        } catch (ClassNotFoundException c) {
-            Gdx.app.error("Class not found", "" + globalVariables.winGivenState.getClass());
-            c.printStackTrace();
-            return null;
-        }
-    }
-
-    public void populateProbList(ArrayList<Card> state) {
-
-
-        if (state.size() == 2) {
-            preFlopState = state;
-        }
-        if (state.size() == 5) {
-            flopState = state;
-        }
-        if (state.size() == 6) {
-            turnState = state;
-        }
-        if (state.size() == 7) {
-            riverState = state;
-
-            if (whoWins().equals("player")) {
-                updateProbability(1, preFlopState);
-                updateProbability(1, flopState);
-                updateProbability(1, turnState);
-                updateProbability(1, riverState);
-            }
-            if (whoWins().equals("computer")) {
-                updateProbability(0, preFlopState);
-                updateProbability(0, flopState);
-                updateProbability(0, turnState);
-                updateProbability(0, riverState);
-            }
-        }
-
-
-    }
-
-    public void updateProbability(int winLose, ArrayList<Card> state) {
-        ArrayList<Card> sorted = sortState(state);
-        if (globalVariables.winGivenState.containsKey(sorted)) {
-            Vector2 updateProb = globalVariables.winGivenState.get(sorted);
-
-            updateProb.x += winLose;
-            updateProb.y++;
-
-            globalVariables.winGivenState.put(sorted, updateProb);
-        } else {
-            globalVariables.winGivenState.put(sorted, new Vector2(winLose, 1));
-        }
-    }
-
-    public float getProbablity(ArrayList<Card> state) {
-        ArrayList<Card> sorted = sortState(state);
-        Vector2 tempProb = globalVariables.winGivenState.get(sorted);
-        return tempProb.x / tempProb.y;
-    }
-
-    public ArrayList<Card> sortState(ArrayList<Card> state) {
-        return sortByValue(state);
-    }
-
-    public ArrayList<Card> sortByValue(ArrayList<Card> state) {
-        ArrayList<Card> sortedHand = new ArrayList<>();
-        while (state.size() > 0) {
-            int pos = 0;
-            Card c = state.get(0);
-            for (int i = 1; i < state.size(); i++) {
-                Card c1 = state.get(i);
-                if (runConsole.toValue.valueOf(c1.value).getValue() < runConsole.toValue.valueOf(c.value).getValue() ||
-                        (c1.value.equals(c.value) && c1.getSuit() < c.getSuit())) {
-                    pos = i;
-                    c = c1;
-                }
-            }
-            state.remove(pos);
-            sortedHand.add(c);
-        }
-        return sortedHand;
-    }
 
 }

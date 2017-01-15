@@ -62,6 +62,9 @@ public class winTest {
                     set = intToStringValue(highCard) + " High";
                     for (int i = j; i >= 0 && kickers.size() < 5; i--) {
                         if (amountOfCard[i] > 0) {
+                            if (hand.size()==2){
+                                player.handValue=highCard+(i*0.01);
+                            }
                             kickers.add(i);
                         }
                     }

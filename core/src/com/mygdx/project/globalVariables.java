@@ -11,12 +11,23 @@ import java.util.HashMap;
 public class globalVariables {
     static double potValue = 0;
     static double betAmount = 0;
-    static String gameState = "";
-    static String playerAction;
-    static HashMap<ArrayList<Card>, Vector2> winGivenState = new HashMap<>();
-    static HashMap<ArrayList<Card>, HashMap<String, Vector2>> actionGivenState = new HashMap<>();
-    static HashMap<String, Vector2> probAction = new HashMap<>();
-    static HashMap<ArrayList<Card>, Vector2> probState = new HashMap<>();
+    static double blindAmount=50;
+    static String playState = "";
+    static String cardState = "preflop";
+    static String playerAction="";
+    static String computerAction="";
+    static String smallBlind="computer";
+    static String whosTurn="";
+    //static HashMap<Double, Vector2> winGivenState = new HashMap<>();
+    static HashMap<Double, Vector2> winGivenStatePreFlop = new HashMap<>();
+    static HashMap<Double, Vector2> winGivenStateFlop = new HashMap<>();
+    static HashMap<Double, Vector2> winGivenStateTurn = new HashMap<>();
+    static HashMap<Double, Vector2> winGivenStateRiver = new HashMap<>();
+    static HashMap<Double, HashMap<String, Integer>> actionGivenState = new HashMap<>();
+    static HashMap<String, Integer> probAction = new HashMap<>();
+    static HashMap<Double, Integer> probState = new HashMap<>();
+    static int statesDealt = 0;
+    static int actionsPerformed = 0;
 
     static void setBetAmount(double bet) {
         betAmount = bet;

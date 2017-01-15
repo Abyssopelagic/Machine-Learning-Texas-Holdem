@@ -110,28 +110,6 @@ public class testReadToFromFile {
         return tempProb.x / tempProb.y;
     }
 
-    public ArrayList<Card> sortState(ArrayList<Card> state) {
-        return sortByValue(state);
-    }
-
-    public ArrayList<Card> sortByValue(ArrayList<Card> state) {
-        ArrayList<Card> sortedHand = new ArrayList<>();
-        while (state.size() > 0) {
-            int pos = 0;
-            Card c = state.get(0);
-            for (int i = 1; i < state.size(); i++) {
-                Card c1 = state.get(i);
-                if (runConsole.toValue.valueOf(c1.value).getValue() < runConsole.toValue.valueOf(c.value).getValue() ||
-                        (c1.value.equals(c.value) && c1.getSuit() < c.getSuit())) {
-                    pos = i;
-                    c = c1;
-                }
-            }
-            state.remove(pos);
-            sortedHand.add(c);
-        }
-        return sortedHand;
-    }
 
     public double getExpectedValue(double prob){
         return prob*globalVariables.potValue-(1-prob)*globalVariables.betAmount;
