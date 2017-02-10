@@ -62,8 +62,8 @@ public class winTest {
                     set = intToStringValue(highCard) + " High";
                     for (int i = j; i >= 0 && kickers.size() < 5; i--) {
                         if (amountOfCard[i] > 0) {
-                            if (hand.size()==2){
-                                player.handValue=highCard+(i*0.01);
+                            if (hand.size() == 2) {
+                                player.handValue = highCard + (i * 0.01);
                             }
                             kickers.add(i);
                         }
@@ -134,7 +134,7 @@ public class winTest {
                                     kickers.clear();
                                     int max = i > j ? i : j;
                                     int min = i > j ? j : i;
-                                    player.handValue = 200 + max + (min*0.1);
+                                    player.handValue = 200 + max + (min * 0.1);
                                     set = "Two pair " + intToStringValue(i) + "'s" + " and " + intToStringValue(j) + "'s";
                                     for (int q = highCard; q >= 0 && kickers.size() < 1; q--) {
                                         if (amountOfCard[q] >= 1 && q != i && q != j) {
@@ -208,7 +208,7 @@ public class winTest {
                                 //hand value
                                 if (player.handValue < 600) {
                                     kickers.clear();
-                                    player.handValue = 600 + j + (i*0.1);
+                                    player.handValue = 600 + j + (i * 0.1);
                                     set = "Full house " + intToStringValue(j) + "'s " + "over " + intToStringValue(i) + "'s";
                                 }
                             }

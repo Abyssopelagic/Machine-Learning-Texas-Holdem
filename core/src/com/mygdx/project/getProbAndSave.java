@@ -236,38 +236,46 @@ public class getProbAndSave {
         int updateProbRaise = (Integer) ((HashMap) globalVariables.actionGivenState.get(handValue)).get("raise");
 
         switch (action) {
-            case ("fold"): {
+            case ("fold"):
                 globalVariables.actionGivenState.put(handValue, new HashMap<String, Integer>() {{
                     put("fold", updateProbFold + 1);
                     put("check", updateProbCheck);
                     put("call", updateProbCall);
                     put("raise", updateProbRaise);
                 }});
-            }
-            case ("check"): {
+                updateProbAction("fold");
+                break;
+
+            case ("check"):
                 globalVariables.actionGivenState.put(handValue, new HashMap<String, Integer>() {{
                     put("fold", updateProbCheck);
                     put("check", updateProbCheck + 1);
                     put("call", updateProbCheck);
                     put("raise", updateProbCheck);
                 }});
-            }
-            case ("call"): {
+                updateProbAction("check");
+                break;
+
+            case ("call"):
                 globalVariables.actionGivenState.put(handValue, new HashMap<String, Integer>() {{
                     put("fold", updateProbCall);
                     put("check", updateProbCall);
                     put("call", updateProbCall + 1);
                     put("raise", updateProbCall);
                 }});
-            }
-            case ("raise"): {
+                updateProbAction("call");
+                break;
+
+            case ("raise"):
                 globalVariables.actionGivenState.put(handValue, new HashMap<String, Integer>() {{
                     put("fold", updateProbRaise);
                     put("check", updateProbRaise);
                     put("call", updateProbRaise);
                     put("raise", updateProbRaise + 1);
                 }});
-            }
+                updateProbAction("raise");
+                break;
+
         }
     }
 
@@ -278,6 +286,7 @@ public class getProbAndSave {
         } else {
             globalVariables.probAction.put(action, globalVariables.probAction.get(action) + 1);
         }
+        globalVariables.actionsPerformed++;
 
     }
 
@@ -288,18 +297,19 @@ public class getProbAndSave {
         } else {
             globalVariables.probState.put(handValue, globalVariables.probState.get(handValue) + 1);
         }
+        globalVariables.statesDealt++;
     }
 
-    public float bayesRule(ArrayList<Card> state, String action) {
-        ArrayList<Card> sorted = sortState(state);
+    public float bayes(Double handValue, String action) {
+
         float probAction = globalVariables.probAction.get(action) / globalVariables.actionsPerformed;
-        float probState = globalVariables.probState.get(sorted) / globalVariables.statesDealt;
-        float probActionGivenState = globalVariables.actionGivenState.get(sorted).get(action) / globalVariables.statesDealt;
+        float probState = globalVariables.probState.get(handValue) / globalVariables.statesDealt;
+        float probActionGivenState = globalVariables.actionGivenState.get(handValue).get(action) / globalVariables.statesDealt;
         return (probActionGivenState * probState) / probAction;
     }
 
     public double getExpectedValue(double prob) {
-        return prob * globalVariables.potValue - (1 - prob) * globalVariables.betAmount;
+        return ((prob * globalVariables.potValue) - ((1 - prob) * globalVariables.betAmount));
     }
 
     public ArrayList<Card> sortState(ArrayList<Card> state) {

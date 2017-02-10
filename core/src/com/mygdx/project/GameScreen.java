@@ -26,6 +26,8 @@ public class GameScreen extends ApplicationAdapter {
 
     SpriteBatch batch;
 
+    int checkExpectedValue=0;
+
     getProbAndSave probAndSave;
     ArrayList<Card> playerOneplusTable;
     boolean preflopturn;
@@ -59,8 +61,8 @@ public class GameScreen extends ApplicationAdapter {
     static final int cardHeight = 726 / 5;
     static final int stageWidth = 800;
     static final int stageHeight = 600;
-    ArrayList<Card> deck = new ArrayList<Card>();
-    ArrayList<Card> table = new ArrayList<Card>();
+    ArrayList<Card> deck = new ArrayList<>();
+    ArrayList<Card> table = new ArrayList<>();
     static Player P1;
     static Player P2;
     int i = 1;
@@ -78,10 +80,10 @@ public class GameScreen extends ApplicationAdapter {
         param.size = 14;
         param.color = Color.BLACK;
         font = gen.generateFont(param);
-        param.size=80;
-        fontEnd=gen.generateFont(param);
-        param.size=40;
-        fontEndSub=gen.generateFont(param);
+        param.size = 80;
+        fontEnd = gen.generateFont(param);
+        param.size = 40;
+        fontEndSub = gen.generateFont(param);
         gen.dispose();
 
         probAndSave = new getProbAndSave();
@@ -96,15 +98,15 @@ public class GameScreen extends ApplicationAdapter {
         raiseAmount = new TextField("", fieldSkin);
         raiseAmount.setPosition(470, 90);
 
-        textButtonFlop = new TextButton("Flop", fieldSkin);
-        textButtonTurn = new TextButton("Turn", fieldSkin);
-        textButtonRiver = new TextButton("River", fieldSkin);
-        textButtonFlop.setPosition(10, 400);
-        textButtonFlop.setSize(100, 75);
-        textButtonTurn.setPosition(120, 400);
-        textButtonTurn.setSize(100, 75);
-        textButtonRiver.setPosition(230, 400);
-        textButtonRiver.setSize(100, 75);
+//        textButtonFlop = new TextButton("Flop", fieldSkin);
+//        textButtonTurn = new TextButton("Turn", fieldSkin);
+//        textButtonRiver = new TextButton("River", fieldSkin);
+//        textButtonFlop.setPosition(10, 400);
+//        textButtonFlop.setSize(100, 75);
+//        textButtonTurn.setPosition(120, 400);
+//        textButtonTurn.setSize(100, 75);
+//        textButtonRiver.setPosition(230, 400);
+//        textButtonRiver.setSize(100, 75);
 
         textButtonNewHand = new TextButton("New Hand", fieldSkin);
         textButtonNewHand.setPosition(340, 400);
@@ -123,13 +125,10 @@ public class GameScreen extends ApplicationAdapter {
         foldButton.setPosition(580, 10);
         foldButton.setSize(100, 75);
 
-        stage.addActor(textButtonFlop);
-        stage.addActor(textButtonTurn);
-        stage.addActor(textButtonRiver);
+//        stage.addActor(textButtonFlop);
+//        stage.addActor(textButtonTurn);
+//        stage.addActor(textButtonRiver);
         stage.addActor(textButtonNewHand);
-        textButtonFlop.setVisible(false);
-        textButtonTurn.setVisible(false);
-        textButtonRiver.setVisible(false);
 
         stage.addActor(callButton);
         stage.addActor(checkButton);
@@ -141,45 +140,45 @@ public class GameScreen extends ApplicationAdapter {
         raiseAmount.setMessageText("Bet Amount");
         stage.addActor(raiseAmount);
 
-        textButtonFlop.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (table.size() == 0) {
-                    flop();
-                }
-            }
-        });
-
-        textButtonTurn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (table.size() == 3) {
-                    turnRiver();
-                }
-            }
-        });
-
-        textButtonRiver.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (table.size() == 4) {
-                    turnRiver();
-                }
-            }
-        });
+//        textButtonFlop.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                if (table.size() == 0) {
+//                    flop();
+//                }
+//            }
+//        });
+//
+//        textButtonTurn.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                if (table.size() == 3) {
+//                    turnRiver();
+//                }
+//            }
+//        });
+//
+//        textButtonRiver.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                if (table.size() == 4) {
+//                    turnRiver();
+//                }
+//            }
+//        });
 
         textButtonNewHand.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (globalVariables.cardState.equals("preflop")&&table.size()==5) {
+                if (globalVariables.cardState.equals("preflop") && table.size() == 5) {
                     clearAll();
-                    textButtonRiver.setChecked(false);
-                    textButtonTurn.setChecked(false);
-                    textButtonFlop.setChecked(false);
+//                    textButtonRiver.setChecked(false);
+//                    textButtonTurn.setChecked(false);
+//                    textButtonFlop.setChecked(false);
                     textButtonNewHand.setChecked(false);
-                    stage.addActor(textButtonFlop);
-                    stage.addActor(textButtonTurn);
-                    stage.addActor(textButtonRiver);
+//                    stage.addActor(textButtonFlop);
+//                    stage.addActor(textButtonTurn);
+//                    stage.addActor(textButtonRiver);
                     preflopturn = true;
                     flopturn = false;
                     turnturn = false;
@@ -192,6 +191,8 @@ public class GameScreen extends ApplicationAdapter {
                     computerWins = false;
                     globalVariables.potValue = 0;
                     globalVariables.betAmount = 0;
+
+                    render();
                 }
             }
         });
@@ -201,9 +202,11 @@ public class GameScreen extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 checkBet();
                 globalVariables.betAmount = 0;
-                globalVariables.computerAction="";
+                globalVariables.computerAction = "";
 
                 decisionState.getDecision(getPlayer(P2).player.handValue, P2);
+
+                render();
             }
         });
 
@@ -224,7 +227,9 @@ public class GameScreen extends ApplicationAdapter {
                             globalVariables.cardState = "river";
                             break;
                     }
-                    globalVariables.computerAction="";
+                    globalVariables.computerAction = "";
+
+                    render();
                 }
             }
         });
@@ -232,14 +237,13 @@ public class GameScreen extends ApplicationAdapter {
         raiseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (!raiseAmount.getText().equals("")) {
-                    if (P1.playerMoney >= Integer.valueOf(raiseAmount.getText())) {
+                if (!raiseAmount.getText().equals("") && P1.playerMoney >= Double.valueOf(raiseAmount.getText())) {
+                    raiseBet(Double.valueOf(raiseAmount.getText()));
+                    raiseAmount.setText("");
+                    globalVariables.computerAction = "";
+                    decisionState.getDecision(getPlayer(P2).player.handValue, P2);
 
-                        raiseBet(Integer.valueOf(raiseAmount.getText()));
-                        raiseAmount.setText("");
-                        globalVariables.computerAction="";
-                        decisionState.getDecision(getPlayer(P2).player.handValue, P2);
-                    }
+                    render();
                 }
             }
         });
@@ -252,13 +256,13 @@ public class GameScreen extends ApplicationAdapter {
                 globalVariables.potValue = 0;
                 globalVariables.betAmount = 0;
                 clearAll();
-                textButtonRiver.setChecked(false);
-                textButtonTurn.setChecked(false);
-                textButtonFlop.setChecked(false);
+//                textButtonRiver.setChecked(false);
+//                textButtonTurn.setChecked(false);
+//                textButtonFlop.setChecked(false);
                 textButtonNewHand.setChecked(false);
-                stage.addActor(textButtonFlop);
-                stage.addActor(textButtonTurn);
-                stage.addActor(textButtonRiver);
+//                stage.addActor(textButtonFlop);
+//                stage.addActor(textButtonTurn);
+//                stage.addActor(textButtonRiver);
                 raiseAmount.setText("");
                 preflopturn = true;
                 flopturn = false;
@@ -270,6 +274,8 @@ public class GameScreen extends ApplicationAdapter {
                 handTies = false;
                 playerWins = false;
                 computerWins = false;
+
+                render();
             }
         });
 
@@ -300,12 +306,13 @@ public class GameScreen extends ApplicationAdapter {
 
         drawCards(P1);
         drawCards(P2);
-        if (P1.playerMoney==0&&globalVariables.cardState.equals("preflop")){
-            fontEnd.draw(batch,"Game Over",100,350);
-            fontEndSub.draw(batch,"Computer Win's",180,280);
-        } else if (P2.playerMoney==0&&globalVariables.cardState.equals("preflop")){
-            fontEnd.draw(batch,"Game Over",100,350);
-            fontEndSub.draw(batch,"Player Win's",220,280);
+
+        if (P1.playerMoney == 0 && globalVariables.cardState.equals("preflop")) {
+            fontEnd.draw(batch, "Game Over", 100, 350);
+            fontEndSub.draw(batch, "Computer Win's", 180, 280);
+        } else if (P2.playerMoney == 0 && globalVariables.cardState.equals("preflop")) {
+            fontEnd.draw(batch, "Game Over", 100, 350);
+            fontEndSub.draw(batch, "Player Win's", 220, 280);
         } else {
             drawTable(table);
         }
@@ -323,6 +330,25 @@ public class GameScreen extends ApplicationAdapter {
         font.draw(batch, "play state: " + globalVariables.playState, 20, stageHeight - 70);
         font.draw(batch, "card state: " + globalVariables.cardState, 20, stageHeight - 90);
         font.draw(batch, "computer action: " + globalVariables.computerAction, 20, stageHeight - 110);
+
+
+
+//        switch (globalVariables.cardState){
+//            case "preflop":
+//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"preflop")));
+//                break;
+//            case "flop":
+//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"flop")));
+//                break;
+//            case "turn":
+//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"turn")));
+//                break;
+//            case "river":
+//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"river")));
+//                break;
+//        }
+
+
 
         if (table.size() == 0 && preflopturn) {
             probAndSave.populateProbList(playerOneplusTable, getPlayer(P2).player.handValue, getPlayer(P1), getPlayer(P2), table);
@@ -342,14 +368,11 @@ public class GameScreen extends ApplicationAdapter {
         }
         if (globalVariables.cardState.equals("flop") && table.size() == 0) {
             flop();
-        }
-        if (globalVariables.cardState.equals("turn") && table.size() == 3) {
+        } else if (globalVariables.cardState.equals("turn") && table.size() == 3) {
             turnRiver();
-        }
-        if (globalVariables.cardState.equals("river") && table.size() == 4) {
+        } else if (globalVariables.cardState.equals("river") && table.size() == 4) {
             turnRiver();
-        }
-        if (globalVariables.cardState.equals("river") && table.size() == 5) {
+        } else if (globalVariables.cardState.equals("river") && table.size() == 5) {
             globalVariables.cardState = "end";
         }
         if (globalVariables.playState.equals("fold")) {
@@ -357,13 +380,13 @@ public class GameScreen extends ApplicationAdapter {
             globalVariables.potValue = 0;
             globalVariables.betAmount = 0;
             clearAll();
-            textButtonRiver.setChecked(false);
-            textButtonTurn.setChecked(false);
-            textButtonFlop.setChecked(false);
+//            textButtonRiver.setChecked(false);
+//            textButtonTurn.setChecked(false);
+//            textButtonFlop.setChecked(false);
             textButtonNewHand.setChecked(false);
-            stage.addActor(textButtonFlop);
-            stage.addActor(textButtonTurn);
-            stage.addActor(textButtonRiver);
+//            stage.addActor(textButtonFlop);
+//            stage.addActor(textButtonTurn);
+//            stage.addActor(textButtonRiver);
             raiseAmount.setText("");
             preflopturn = true;
             flopturn = false;
@@ -401,6 +424,7 @@ public class GameScreen extends ApplicationAdapter {
         table.clear();
         deck.clear();
         createDeck();
+
 
         P1.handValue = 0;
         P1.hand.clear();

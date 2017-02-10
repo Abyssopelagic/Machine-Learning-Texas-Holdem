@@ -43,7 +43,7 @@ public class decisionState {
                                 } else if (globalVariables.betAmount >= 400)
                                     fold();
                                 else
-                                    raise(100);
+                                    raise(probWinPreFlop);
                                 //player turn again
                             else if (globalVariables.betAmount > 100)
                                 fold();
@@ -57,8 +57,8 @@ public class decisionState {
                                 check();
                                 globalVariables.cardState = "flop";
                             }
-                            if (probWinPreFlop > .5)
-                                raise(100);
+                            else if (probWinPreFlop > .5)
+                                raise(probWinPreFlop);
                             //player turn again
                             break;
                     }
@@ -74,15 +74,15 @@ public class decisionState {
                                 } else if (globalVariables.betAmount >= 400)
                                     fold();
                                 else
-                                    raise(100);
+                                    raise(probWinFlop);
                             }
                             //call
-                            if (probWinFlop >= .5) {
+                            else if (probWinFlop >= .5) {
                                 call();
                                 globalVariables.cardState = "turn";
                             }
                             //fold
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 fold();
                                 globalVariables.cardState = "turn";
                             }
@@ -90,10 +90,10 @@ public class decisionState {
                         case ("check"):
                             //raise
                             if (probWinFlop >= .5) {
-                                raise(100);
+                                raise(probWinFlop);
                             }
                             //check
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 check();
                                 globalVariables.cardState = "turn";
                             }
@@ -111,15 +111,15 @@ public class decisionState {
                                 } else if (globalVariables.betAmount >= 400)
                                     fold();
                                 else
-                                    raise(100);
+                                    raise(probWinTurn);
                             }
                             //call
-                            if (probWinFlop >= .5) {
+                            else if (probWinFlop >= .5) {
                                 call();
                                 globalVariables.cardState = "river";
                             }
                             //fold
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 fold();
                                 globalVariables.cardState = "river";
                             }
@@ -127,10 +127,10 @@ public class decisionState {
                         case ("check"):
                             //raise
                             if (probWinFlop >= .5) {
-                                raise(100);
+                                raise(probWinTurn);
                             }
                             //check
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 check();
                                 globalVariables.cardState = "river";
                             }
@@ -148,15 +148,15 @@ public class decisionState {
                                 } else if (globalVariables.betAmount >= 400)
                                     fold();
                                 else
-                                    raise(100);
+                                    raise(probWinRiver);
                             }
                             //call
-                            if (probWinFlop >= .5) {
+                            else if (probWinFlop >= .5) {
                                 call();
                                 globalVariables.cardState = "end";
                             }
                             //fold
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 fold();
                                 globalVariables.cardState = "end";
                             }
@@ -164,10 +164,10 @@ public class decisionState {
                         case ("check"):
                             //raise
                             if (probWinFlop >= .5) {
-                                raise(100);
+                                raise(probWinRiver);
                             }
                             //check
-                            if (probWinFlop < .5) {
+                            else if (probWinFlop < .5) {
                                 check();
                                 globalVariables.cardState = "end";
                             }
@@ -211,7 +211,8 @@ public class decisionState {
         globalVariables.computerAction = "check";
     }
 
-    public void raise(double amount) {
+    public void raise(double probwin) {
+        double amount = computer.playerMoney*probwin*(computer.playerMoney/(globalVariables.potValue-computer.playerMoney-probwin*computer.playerMoney));
         double playerbet = globalVariables.betAmount;
         globalVariables.betAmount = amount;
         globalVariables.computerAction = "raise $" + amount;

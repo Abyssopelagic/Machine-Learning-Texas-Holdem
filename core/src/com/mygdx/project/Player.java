@@ -12,5 +12,5 @@ public class Player {
     Player(int playerNumber){
         this.playerNumber=playerNumber;
     }
-    int playerMoney=0;
+    double playerMoney=0;
 }
