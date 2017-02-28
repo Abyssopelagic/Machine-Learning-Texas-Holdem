@@ -30,6 +30,8 @@ public class winTest {
     int highCard;
     int highCardFlush = 0;
 
+
+    //reorder so best hand is checked first and then break if found
     public winTest(ArrayList<Card> hand) {
         this.hand = hand;
     }
@@ -51,20 +53,27 @@ public class winTest {
                 }
             }
         }
+        if (hand.size()==0){
+            player.handValue=1;
+            return;
+        }
 
         //check high card
         for (int j = amountOfCard.length - 1; j >= 0; j--) {
             if (amountOfCard[j] > 0) {
                 highCard = j;
                 //hand value
-                if (player.handValue < 1) {
+                if (player.handValue < 15) {
                     player.handValue = highCard;
                     set = intToStringValue(highCard) + " High";
                     for (int i = j; i >= 0 && kickers.size() < 5; i--) {
                         if (amountOfCard[i] > 0) {
-                            if (hand.size() == 2) {
+                            if (i >= 10) {
                                 player.handValue = highCard + (i * 0.01);
+                            } else {
+                                player.handValue = highCard + (i * 0.001);
                             }
+
                             kickers.add(i);
                         }
                     }
@@ -134,7 +143,11 @@ public class winTest {
                                     kickers.clear();
                                     int max = i > j ? i : j;
                                     int min = i > j ? j : i;
-                                    player.handValue = 200 + max + (min * 0.1);
+                                    if (min >= 10) {
+                                        player.handValue = 200 + max + (min * 0.01);
+                                    } else {
+                                        player.handValue = 200 + max + (min * 0.001);
+                                    }
                                     set = "Two pair " + intToStringValue(i) + "'s" + " and " + intToStringValue(j) + "'s";
                                     for (int q = highCard; q >= 0 && kickers.size() < 1; q--) {
                                         if (amountOfCard[q] >= 1 && q != i && q != j) {
@@ -208,7 +221,11 @@ public class winTest {
                                 //hand value
                                 if (player.handValue < 600) {
                                     kickers.clear();
-                                    player.handValue = 600 + j + (i * 0.1);
+                                    if (i >= 10) {
+                                        player.handValue = 600 + j + (i * 0.01);
+                                    } else {
+                                        player.handValue = 600 + j + (i * 0.001);
+                                    }
                                     set = "Full house " + intToStringValue(j) + "'s " + "over " + intToStringValue(i) + "'s";
                                 }
                             }

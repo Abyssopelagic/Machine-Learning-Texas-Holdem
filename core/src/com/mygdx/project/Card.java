@@ -1,21 +1,21 @@
 package com.mygdx.project;
 
 
-
-import java.io.Serializable;
+import java.io.*;
 import java.util.Objects;
 
 /**
  * Created by ksbay on 9/30/2016.
  */
-public class Card implements Serializable{
+public class Card implements Serializable {
     public String suit;
     public String value;
 
-     Card(String suit, String value){
-        this.suit=suit;
-        this.value=value;
+    Card(String suit, String value) {
+        this.suit = suit;
+        this.value = value;
     }
+
     public int getSuit() {
         switch (suit) {
             case "clubs":
@@ -29,27 +29,28 @@ public class Card implements Serializable{
         }
         return -1;
     }
+
     public String getValue() {
         return value;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o==this){
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
 
-        if (!(o instanceof Card)){
+        if (!(o instanceof Card)) {
             return false;
         }
 
-        Card c = (Card)o;
+        Card c = (Card) o;
 
-        return this.suit.equals(c.suit)&&this.value.equals(c.value);
+        return this.suit.equals(c.suit) && this.value.equals(c.value);
     }
 
     @Override
-    public int hashCode(){
-        return Objects.hash(suit,value);
+    public int hashCode() {
+        return Objects.hash(suit, value);
     }
 }

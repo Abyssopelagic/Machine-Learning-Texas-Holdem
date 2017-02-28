@@ -332,24 +332,6 @@ public class GameScreen extends ApplicationAdapter {
         font.draw(batch, "computer action: " + globalVariables.computerAction, 20, stageHeight - 110);
 
 
-
-//        switch (globalVariables.cardState){
-//            case "preflop":
-//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"preflop")));
-//                break;
-//            case "flop":
-//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"flop")));
-//                break;
-//            case "turn":
-//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"turn")));
-//                break;
-//            case "river":
-//                System.out.println(probAndSave.getExpectedValue(probAndSave.getWinProb(getPlayer(P2).player.handValue,"river")));
-//                break;
-//        }
-
-
-
         if (table.size() == 0 && preflopturn) {
             probAndSave.populateProbList(playerOneplusTable, getPlayer(P2).player.handValue, getPlayer(P1), getPlayer(P2), table);
             preflopturn = false;
@@ -396,7 +378,7 @@ public class GameScreen extends ApplicationAdapter {
             globalVariables.playState = "";
             globalVariables.computerAction = "";
         }
-        printWinner();
+        getPrintWinner();
         if (globalVariables.cardState.equals("end")) {
             giveWinnings();
         }
@@ -456,7 +438,7 @@ public class GameScreen extends ApplicationAdapter {
         }
     }
 
-    public void printWinner() {
+    public void getPrintWinner() {
         if (table.size() == 5) {
             if (getPlayer(P1).player.handValue > getPlayer(P2).player.handValue) {
                 font.draw(batch, "Player Wins", 300, 150);

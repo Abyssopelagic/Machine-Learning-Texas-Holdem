@@ -300,18 +300,6 @@ public class getProbAndSave {
         globalVariables.statesDealt++;
     }
 
-    public float bayes(Double handValue, String action) {
-
-        float probAction = globalVariables.probAction.get(action) / globalVariables.actionsPerformed;
-        float probState = globalVariables.probState.get(handValue) / globalVariables.statesDealt;
-        float probActionGivenState = globalVariables.actionGivenState.get(handValue).get(action) / globalVariables.statesDealt;
-        return (probActionGivenState * probState) / probAction;
-    }
-
-    public double getExpectedValue(double prob) {
-        return ((prob * globalVariables.potValue) - ((1 - prob) * globalVariables.betAmount));
-    }
-
     public ArrayList<Card> sortState(ArrayList<Card> state) {
         return sortByValue(state);
     }
