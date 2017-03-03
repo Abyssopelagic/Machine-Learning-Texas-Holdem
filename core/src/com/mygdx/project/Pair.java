@@ -1,7 +1,7 @@
 package com.mygdx.project;
 
 /**
- * Created by ksbay on 2/23/2017.
+ * Created by Keenan Baynard on 2/23/2017.
  */
 public class Pair<A, B> {
     public A action;

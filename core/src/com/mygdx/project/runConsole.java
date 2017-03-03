@@ -3,10 +3,11 @@ package com.mygdx.project;
 import com.badlogic.gdx.Gdx;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
- * Created by ksbay on 9/30/2016.
+ * Created by Keenan Baynard on 9/30/2016.
  */
 public class runConsole {
 
@@ -65,11 +66,12 @@ public class runConsole {
 
 
 
-        testing.getProblist("probabilityOfHand");
+        getData.getMaps("probabilityOfHand");
 
 
 
-
+        getData.getMaps("playerCards");
+        getData.getMaps("tableCards");
         getData.getCards();
         getData.getTable();
         getData.getMaps("preFlopActions");
@@ -94,10 +96,10 @@ public class runConsole {
         winTest.handCheck();
         //System.out.println(globalVariables.turnStateMap);
         //System.out.println(globalVariables.preFlopStateMap);
-        System.out.println(getData.handStrengthGivenTableStrengthAndAction(winTest.player.handValue,"check", "flop"));
+        System.out.println(getData.handStrengthGivenTableStrengthAndAction(winTest.player.handValue,"bet", "flop"));
         System.out.println(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey());
         System.out.println(getData.handProbabilityMap.get(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey()));
-        getData.saveActions();
+        getData.saveActionsAndCards();
         getData.saveMaps();
         getData.saveStrings();
         System.out.println();

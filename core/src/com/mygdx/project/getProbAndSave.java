@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by ksbay on 1/5/2017.
+ * Created by Keenan Baynard on 1/5/2017.
  */
 public class getProbAndSave {
 

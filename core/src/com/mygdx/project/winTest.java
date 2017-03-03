@@ -3,7 +3,7 @@ package com.mygdx.project;
 import java.util.ArrayList;
 
 /**
- * Created by ksbay on 9/30/2016.
+ * Created by Keenan Baynard on 9/30/2016.
  */
 public class winTest {
 
@@ -66,15 +66,16 @@ public class winTest {
                 if (player.handValue < 15) {
                     player.handValue = highCard;
                     set = intToStringValue(highCard) + " High";
-                    for (int i = j; i >= 0 && kickers.size() < 5; i--) {
+                    for (int i = j-1; i >= 0 && kickers.size() < 4; i--) {
                         if (amountOfCard[i] > 0) {
-                            if (i >= 10) {
-                                player.handValue = highCard + (i * 0.01);
-                            } else {
-                                player.handValue = highCard + (i * 0.001);
-                            }
-
                             kickers.add(i);
+                        }
+                    }
+                    if (kickers.size()!=0) {
+                        if (kickers.get(0) >= 10) {
+                            player.handValue = highCard + (kickers.get(0) * 0.01);
+                        } else {
+                            player.handValue = highCard + (kickers.get(0) * 0.001);
                         }
                     }
                 }
@@ -172,7 +173,7 @@ public class winTest {
                 //hand value
                 if (player.handValue < 400) {
                     kickers.clear();
-                    player.handValue = 400 + straighttop - 4;
+                    player.handValue = 400 + straighttop;
                     set = "Straight " + intToStringValue((straighttop - 4)) + " Through " + intToStringValue(straighttop);
                 }
                 break;

@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.Objects;
 
 /**
- * Created by ksbay on 9/30/2016.
+ * Created by Keenan Baynard on 9/30/2016.
  */
 public class Card implements Serializable {
     public String suit;

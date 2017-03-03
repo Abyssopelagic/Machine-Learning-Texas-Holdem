@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by ksbay on 11/29/2016.
+ * Created by Keenan Baynard on 11/29/2016.
  */
 public class testReadToFromFile {
     HashMap<String, Integer> writeTo = new HashMap<String, Integer>();
