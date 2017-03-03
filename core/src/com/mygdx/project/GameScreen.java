@@ -177,6 +177,11 @@ public class GameScreen extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 if (globalVariables.cardState.equals("end") && table.size() == 5) {
                     clearAll();
+                    if (globalVariables.smallBlind.equals("computer")){
+                        globalVariables.smallBlind="player";
+                    } else {
+                        globalVariables.smallBlind="computer";
+                    }
                     globalVariables.potValue = globalVariables.smallBlindAmount+globalVariables.bigBlindAmount;
                     globalVariables.betAmount = globalVariables.smallBlindAmount;
                     if (globalVariables.smallBlind.equals("computer")){
@@ -210,11 +215,7 @@ public class GameScreen extends ApplicationAdapter {
                     playerTurnAction="";
                     playerRiverAction="";
 
-                    if (globalVariables.smallBlind.equals("computer")){
-                        globalVariables.smallBlind="player";
-                    } else {
-                        globalVariables.smallBlind="computer";
-                    }
+
                     Gdx.graphics.requestRendering();
                 }
             }
@@ -238,7 +239,7 @@ public class GameScreen extends ApplicationAdapter {
                     globalVariables.betAmount = 0;
                     globalVariables.computerAction = "";
 
-                    if (globalVariables.smallBlind.equals("computer")) {
+                    if (globalVariables.smallBlind.equals("player")&&globalVariables.cardState.equals("preflop") || !globalVariables.cardState.equals("preflop") && table.size()!=0) {
                         decisionState.getDecision(getPlayer(P2).player.handValue, P2, table, P1);
                     }
                     Gdx.graphics.requestRendering();
@@ -321,6 +322,11 @@ public class GameScreen extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 //foldHand();
                 P2.playerMoney += globalVariables.potValue;
+                if (globalVariables.smallBlind.equals("computer")){
+                    globalVariables.smallBlind="player";
+                } else {
+                    globalVariables.smallBlind="computer";
+                }
                 globalVariables.potValue = globalVariables.smallBlindAmount+globalVariables.bigBlindAmount;
                 globalVariables.betAmount = globalVariables.smallBlindAmount;
                 if (globalVariables.smallBlind.equals("computer")){
@@ -356,12 +362,6 @@ public class GameScreen extends ApplicationAdapter {
                 playerTurnAction="";
                 playerRiverAction="";
 
-                if (globalVariables.smallBlind.equals("computer")){
-                    globalVariables.smallBlind="player";
-                } else {
-                    globalVariables.smallBlind="computer";
-                }
-
                 Gdx.graphics.requestRendering();
             }
         });
@@ -377,7 +377,10 @@ public class GameScreen extends ApplicationAdapter {
         probAndSave.getProblist("serializedWinGivenStateTurn");
         probAndSave.getProblist("serializedWinGivenStateRiver");
 
-        getData.getMaps("probabilityOfHand");
+        getData.getMaps("probabilityOfHandPreFlop");
+        getData.getMaps("probabilityOfHandFlop");
+        getData.getMaps("probabilityOfHandTurn");
+        getData.getMaps("probabilityOfHandRiver");
 
 
         getData.getMaps("playerCards");
@@ -479,6 +482,11 @@ public class GameScreen extends ApplicationAdapter {
         }
         if (globalVariables.playState.equals("fold")) {
             P1.playerMoney += globalVariables.potValue;
+            if (globalVariables.smallBlind.equals("computer")){
+                globalVariables.smallBlind="player";
+            } else {
+                globalVariables.smallBlind="computer";
+            }
             globalVariables.potValue = globalVariables.smallBlindAmount+globalVariables.bigBlindAmount;
             globalVariables.betAmount = globalVariables.smallBlindAmount;
             if (globalVariables.smallBlind.equals("computer")){
@@ -511,11 +519,7 @@ public class GameScreen extends ApplicationAdapter {
             playerTurnAction="";
             playerRiverAction="";
 
-            if (globalVariables.smallBlind.equals("computer")){
-                globalVariables.smallBlind="player";
-            } else {
-                globalVariables.smallBlind="computer";
-            }
+
 
         }
 
@@ -803,7 +807,7 @@ public class GameScreen extends ApplicationAdapter {
 
     public void checkBet() {
         globalVariables.playState = "check";
-        if (globalVariables.smallBlind.equals("player") || globalVariables.cardState.equals("preflop")){
+        if (globalVariables.smallBlind.equals("computer") && globalVariables.cardState.equals("preflop")||globalVariables.smallBlind.equals("player")&&!globalVariables.cardState.equals("preflop")){
             globalVariables.playState="";
             switch (globalVariables.cardState){
                 case "preflop":

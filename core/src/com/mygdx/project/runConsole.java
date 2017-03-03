@@ -18,10 +18,12 @@ public class runConsole {
     ArrayList<Card> playerFlop;
     ArrayList<Card> playerTurn;
     ArrayList<Card> playerRiver;
+
     ArrayList<Card> computerPreFlop;
     ArrayList<Card> computerFlop;
     ArrayList<Card> computerTurn;
     ArrayList<Card> computerRiver;
+
     ArrayList<Card> tableFlop;
     ArrayList<Card> tableTurn;
     ArrayList<Card> tableRiver;
@@ -62,70 +64,118 @@ public class runConsole {
 //        trywinPreFlop.handCheck();
 
 
-
-
-
-
-        getData.getMaps("probabilityOfHand");
-
-
-
-        getData.getMaps("playerCards");
-        getData.getMaps("tableCards");
-        getData.getCards();
-        getData.getTable();
-        getData.getMaps("preFlopActions");
-        getData.getMaps("flopActions");
-        getData.getMaps("turnActions");
-        getData.getMaps("riverActions");
-        getData.getMaps("preFlopActionMapCount");
-        getData.getMaps("flopActionMapCount");
-        getData.getMaps("turnActionMapCount");
-        getData.getMaps("riverActionMapCount");
-        getData.getMaps("preFlopStateMap");
+        getData.getMaps("probabilityOfHandPreFlop");
+        getData.getMaps("probabilityOfHandFlop");
+        getData.getMaps("probabilityOfHandTurn");
+        getData.getMaps("probabilityOfHandRiver");
         getData.getMaps("flopStateMap");
-        getData.getMaps("turnStateMap");
-        getData.getMaps("riverStateMap");
 
-//        System.out.println(getData.preFlopStateMap);
-//        System.out.println(getData.flopStateMap);
-//        System.out.println(getData.turnStateMap);
-//        System.out.println(getData.riverStateMap);
-        ArrayList<Card> test = new ArrayList<>(Arrays.asList(new Card("hearts","two"), new Card("hearts","four"), new Card("clubs","king")));
-        winTest winTest = new winTest(test);
-        winTest.handCheck();
-        //System.out.println(globalVariables.turnStateMap);
-        //System.out.println(globalVariables.preFlopStateMap);
-        System.out.println(getData.handStrengthGivenTableStrengthAndAction(winTest.player.handValue,"bet", "flop"));
-        System.out.println(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey());
-        System.out.println(getData.handProbabilityMap.get(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey()));
-        getData.saveActionsAndCards();
-        getData.saveMaps();
-        getData.saveStrings();
+
+//        getData.getMaps("playerCards");
+//        getData.getMaps("tableCards");
+//        getData.getCards();
+//        getData.getTable();
+//        getData.getMaps("preFlopActions");
+//        getData.getMaps("flopActions");
+//        getData.getMaps("turnActions");
+//        getData.getMaps("riverActions");
+//        getData.getMaps("preFlopActionMapCount");
+//        getData.getMaps("flopActionMapCount");
+//        getData.getMaps("turnActionMapCount");
+//        getData.getMaps("riverActionMapCount");
+//        getData.getMaps("preFlopStateMap");
+//        getData.getMaps("flopStateMap");
+//        getData.getMaps("turnStateMap");
+//        getData.getMaps("riverStateMap");
+//
+////        System.out.println(getData.preFlopStateMap);
+////        System.out.println(getData.flopStateMap);
+////        System.out.println(getData.turnStateMap);
+////        System.out.println(getData.riverStateMap);
+//        ArrayList<Card> test = new ArrayList<>(Arrays.asList(new Card("hearts","two"), new Card("hearts","four"), new Card("clubs","king")));
+//        winTest winTest = new winTest(test);
+//        winTest.handCheck();
+//        //System.out.println(globalVariables.turnStateMap);
+//        //System.out.println(globalVariables.preFlopStateMap);
+//        System.out.println(getData.handStrengthGivenTableStrengthAndAction(winTest.player.handValue,"bet", "flop"));
+//        System.out.println(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey());
+//        System.out.println(getData.handProbabilityMap.get(getData.handProbabilityMap.entrySet().stream().max((entry1,entry2)->entry1.getValue() > entry2.getValue() ? 1: -1).get().getKey()));
+//        getData.saveActionsAndCards();
+//        getData.saveMaps();
+//        getData.saveStrings();
+//        System.out.println();
+
+        System.out.println(globalVariables.flopStateMap);
+        //System.out.println(globalVariables.probabilityOfHandFlop);
         System.out.println();
 
 
-        
-//        for (int i = 0; i < 1000000; i++) {
-//            testing = new runConsole();
-//            testing.createDeck();
-//            testing.createPlayers();
-//            testing.shuffleDeck();
-//            testing.dealPlayers();
-//
-//            testing.playerPreFlop = new ArrayList<>(P1.hand);
-//            winTest trywinPreFlop = new winTest(testing.playerPreFlop);
-//            trywinPreFlop.handCheck();
-//
-//            if (globalVariables.probabilityOfHand.containsKey(trywinPreFlop.player.handValue)) {
-//                globalVariables.probabilityOfHand.put(trywinPreFlop.player.handValue, globalVariables.probabilityOfHand.get(trywinPreFlop.player.handValue) + 1);
-//            } else {
-//                globalVariables.probabilityOfHand.put(trywinPreFlop.player.handValue, 1);
-//            }
-//        }
-//        testing.saveProblist(globalVariables.probabilityOfHand,"probabilityOfHand");
-//        System.out.println(globalVariables.probabilityOfHand);
-//        System.out.println();
+        for (int i = 0; i < 10000000; i++) {
+            testing = new runConsole();
+            testing.createDeck();
+            testing.createPlayers();
+            testing.shuffleDeck();
+            testing.dealPlayers();
+
+            testing.playerPreFlop = new ArrayList<>(P1.hand);
+            winTest trywinPreFlop = new winTest(testing.playerPreFlop);
+            trywinPreFlop.handCheck();
+
+            if (globalVariables.probabilityOfHandPreFlop.containsKey(trywinPreFlop.player.handValue)) {
+                globalVariables.probabilityOfHandPreFlop.put(trywinPreFlop.player.handValue, globalVariables.probabilityOfHandPreFlop.get(trywinPreFlop.player.handValue) + 1);
+            } else {
+                globalVariables.probabilityOfHandPreFlop.put(trywinPreFlop.player.handValue, 1);
+            }
+
+            testing.flop();
+
+            testing.playerFlop = new ArrayList<>(P1.hand);
+            testing.playerFlop.addAll(testing.table);
+            winTest trywinFlop = new winTest(testing.playerFlop);
+            trywinFlop.handCheck();
+
+            if (globalVariables.probabilityOfHandFlop.containsKey(trywinFlop.player.handValue)) {
+                globalVariables.probabilityOfHandFlop.put(trywinFlop.player.handValue, globalVariables.probabilityOfHandFlop.get(trywinFlop.player.handValue) + 1);
+            } else {
+                globalVariables.probabilityOfHandFlop.put(trywinFlop.player.handValue, 1);
+            }
+
+            testing.turnRiver();
+
+            testing.playerTurn = new ArrayList<>(P1.hand);
+            testing.playerTurn.addAll(testing.table);
+            winTest trywinTurn = new winTest(testing.playerTurn);
+            trywinTurn.handCheck();
+
+            if (globalVariables.probabilityOfHandTurn.containsKey(trywinTurn.player.handValue)) {
+                globalVariables.probabilityOfHandTurn.put(trywinTurn.player.handValue, globalVariables.probabilityOfHandTurn.get(trywinTurn.player.handValue) + 1);
+            } else {
+                globalVariables.probabilityOfHandTurn.put(trywinTurn.player.handValue, 1);
+            }
+
+            testing.turnRiver();
+
+            testing.playerRiver = new ArrayList<>(P1.hand);
+            testing.playerRiver.addAll(testing.table);
+            winTest trywinRiver = new winTest(testing.playerRiver);
+            trywinRiver.handCheck();
+
+            if (globalVariables.probabilityOfHandRiver.containsKey(trywinRiver.player.handValue)) {
+                globalVariables.probabilityOfHandRiver.put(trywinRiver.player.handValue, globalVariables.probabilityOfHandRiver.get(trywinRiver.player.handValue) + 1);
+            } else {
+                globalVariables.probabilityOfHandRiver.put(trywinRiver.player.handValue, 1);
+            }
+
+        }
+        testing.saveProblist(globalVariables.probabilityOfHandPreFlop, "probabilityOfHandPreFlop");
+        testing.saveProblist(globalVariables.probabilityOfHandFlop, "probabilityOfHandFlop");
+        testing.saveProblist(globalVariables.probabilityOfHandTurn, "probabilityOfHandTurn");
+        testing.saveProblist(globalVariables.probabilityOfHandRiver, "probabilityOfHandRiver");
+        //System.out.println(globalVariables.probabilityOfHandPreFlop);
+        //System.out.println(globalVariables.probabilityOfHandFlop);
+        //System.out.println(globalVariables.probabilityOfHandTurn);
+        System.out.println(globalVariables.probabilityOfHandRiver);
+        System.out.println();
 
 
 //        testing.probAndSave.getProblist("serializedWinGivenStatePreFlop");
@@ -465,16 +515,28 @@ public class runConsole {
         try {
             FileInputStream fileIn = new FileInputStream("probabilities/" + fileName + ".ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            globalVariables.probabilityOfHand = (HashMap<Double, Integer>) in.readObject();
+            switch (fileName) {
+                case "probabilityOfHandPreFlop":
+                    globalVariables.probabilityOfHandPreFlop = (HashMap<Double, Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandFlop":
+                    globalVariables.probabilityOfHandFlop = (HashMap<Double,Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandTurn":
+                    globalVariables.probabilityOfHandTurn= (HashMap<Double,Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandRiver":
+                    globalVariables.probabilityOfHandRiver= (HashMap<Double,Integer>) in.readObject();
+            }
             in.close();
-            return globalVariables.probabilityOfHand;
+            return null;
         } catch (IOException i) {
             //Throws EOFException, removed stacktrace because of annoyance
             //i.printStackTrace();
             //Gdx.app.error("IOException","Caught");
             return null;
         } catch (ClassNotFoundException c) {
-            Gdx.app.error("Class not found", "" + globalVariables.winGivenStatePreFlop.getClass());
+            Gdx.app.error("Class not found", "" + globalVariables.probabilityOfHandPreFlop.getClass());
             c.printStackTrace();
             return null;
         }

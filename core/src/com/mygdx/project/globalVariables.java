@@ -13,13 +13,13 @@ public class globalVariables {
     static double bigBlindAmount = 200;
     static double smallBlindAmount = bigBlindAmount / 2;
     static double betAmount = smallBlindAmount;
-    static double potValue = smallBlindAmount+bigBlindAmount;
+    static double potValue = smallBlindAmount + bigBlindAmount;
     static boolean handOver = true;
     static String playState = "";
     static String cardState = "preflop";
     static String playerAction = "";
     static String computerAction = "";
-    static String smallBlind = (Math.round(Math.random()))==1? "player":"computer";
+    static String smallBlind = (Math.round(Math.random())) == 1 ? "player" : "computer";
     static HashMap<Double, Vector2> winGivenStatePreFlop = new HashMap<>();
     static HashMap<Double, Vector2> winGivenStateFlop = new HashMap<>();
     static HashMap<Double, Vector2> winGivenStateTurn = new HashMap<>();
@@ -28,6 +28,10 @@ public class globalVariables {
     static HashMap<String, Integer> probAction = new HashMap<>();
     static HashMap<Double, Integer> probState = new HashMap<>();
     static HashMap<Double, Integer> probabilityOfHand = new HashMap<>();
+    static HashMap<Double, Integer> probabilityOfHandPreFlop = new HashMap<>();
+    static HashMap<Double, Integer> probabilityOfHandFlop = new HashMap<>();
+    static HashMap<Double, Integer> probabilityOfHandTurn = new HashMap<>();
+    static HashMap<Double, Integer> probabilityOfHandRiver = new HashMap<>();
     static int statesDealt = 0;
     static int actionsPerformed = 0;
 
@@ -47,5 +51,8 @@ public class globalVariables {
     static HashMap<Double, Double> flopStateMap = new HashMap<>();
     static HashMap<Double, Double> turnStateMap = new HashMap<>();
     static HashMap<Double, Double> riverStateMap = new HashMap<>();
+
+    static int numberOfCalls = 0;
+    static int numberOfRaises = 0;
 
 }

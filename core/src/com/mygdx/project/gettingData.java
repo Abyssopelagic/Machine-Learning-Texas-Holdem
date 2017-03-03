@@ -147,7 +147,6 @@ public class gettingData {
         }
     }
 
-
     public void getTable() {
         String face1 = "";
         String suit1 = "";
@@ -563,25 +562,30 @@ public class gettingData {
 
     public HashMap<Double, Double> handStrengthGivenTableStrengthAndAction(Double tableStrength, String opponentAction, String gameState) {
         HashMap<Double, Double> probOfHand = new HashMap<>();
+        ArrayList<Double> as=new ArrayList<>();
         int gameStateInt = 0;
         switch (gameState) {
             case "preflop":
                 gameStateInt=0;
+                as= new ArrayList<>(globalVariables.probabilityOfHandPreFlop.keySet());
                 break;
             case "flop":
                 gameStateInt = 3;
+                as= new ArrayList<>(globalVariables.probabilityOfHandFlop.keySet());
                 break;
             case "turn":
                 gameStateInt = 4;
+                as=new ArrayList<>(globalVariables.probabilityOfHandTurn.keySet());
                 break;
             case "river":
                 gameStateInt = 5;
+                as=new ArrayList<>(globalVariables.probabilityOfHandRiver.keySet());
         }
         Double sum = sumTableActionProb(tableStrength, opponentAction, gameStateInt);
-        ArrayList<Double> as = new ArrayList<>(globalVariables.preFlopStateMap.keySet());
-        for (int i = 0; i < as.size(); i++) {
-            probOfHand.put(as.get(i),
-                    (tableActionProb(as.get(i), tableStrength, opponentAction, gameStateInt) / sum));
+        //ArrayList<Double> as = new ArrayList<>(globalVariables.preFlopStateMap.keySet());
+        for (Double a : as) {
+            probOfHand.put(a,
+                    (tableActionProb(a, tableStrength, opponentAction, gameStateInt) / sum));
 
         }
         handProbabilityMap = probOfHand;
@@ -597,7 +601,10 @@ public class gettingData {
         winTest tableWinTest;
         ArrayList<String> turnActions = globalVariables.turnAction;
         for (int i = 0; i < globalVariables.playerCardsList.size(); i++) {
-            handWinTest = new winTest(globalVariables.playerCardsList.get(i));
+            ArrayList<Card> temp = new ArrayList<>();
+            temp.addAll(globalVariables.playerCardsList.get(i));
+            temp.addAll(globalVariables.tableCardsList.get(i).subList(0,gameState));
+            handWinTest = new winTest(temp);
             handWinTest.handCheck();
             if (hand == handWinTest.player.handValue) {
                 tableWinTest = new winTest(new ArrayList<>(globalVariables.tableCardsList.get(i).subList(0, gameState)));
@@ -608,24 +615,43 @@ public class gettingData {
             }
             total++;
         }
-        return ((matching / total) * getProbOfHandAtState(handWinTest.player.handValue));
+        return ((matching / total) * getProbOfHandAtState(handWinTest.player.handValue,gameState));
     }
 
     public Double sumTableActionProb(Double tableStrength, String opponentAction, Integer gameState) {
         Double sum = 0.0;
         winTest handWinTest;
         winTest tableWinTest;
-        ArrayList<Double> as = new ArrayList<>(globalVariables.preFlopStateMap.keySet());
-        winTest iWinTest = new winTest(new ArrayList<>());
+        ArrayList<Double> as = new ArrayList<>();
+        switch (gameState) {
+            case 0:
+                as= new ArrayList<>(globalVariables.probabilityOfHandPreFlop.keySet());
+                break;
+            case 3:
+                as= new ArrayList<>(globalVariables.probabilityOfHandFlop.keySet());
+                break;
+            case 4:
+                as=new ArrayList<>(globalVariables.probabilityOfHandTurn.keySet());
+                break;
+            case 5:
+                as=new ArrayList<>(globalVariables.probabilityOfHandRiver.keySet());
+        }
+        //winTest iWinTest = new winTest(new ArrayList<>());
         double matching = 0;
         double total = 0;
-        for (int i = 0; i < as.size(); i++) {
+        for (Double a : as) {
             for (int j = 0; j < globalVariables.playerCardsList.size(); j++) {
-                handWinTest = new winTest(globalVariables.playerCardsList.get(j));
-                iWinTest = new winTest(globalVariables.playerCardsList.get(i));
-                iWinTest.handCheck();
+                ArrayList<Card> temp = new ArrayList<>();
+                //ArrayList<Card> temp2 = new ArrayList<>();
+                temp.addAll(globalVariables.playerCardsList.get(j));
+                temp.addAll(globalVariables.tableCardsList.get(j).subList(0, gameState));
+                //temp2.addAll(globalVariables.playerCardsList.get(i));
+                //temp2.addAll(globalVariables.tableCardsList.get(i).subList(0,gameState));
+                handWinTest = new winTest(temp);
+                //iWinTest = new winTest(temp2);
+                //iWinTest.handCheck();
                 handWinTest.handCheck();
-                if (handWinTest.player.handValue == iWinTest.player.handValue) {
+                if (handWinTest.player.handValue == a) {
                     tableWinTest = new winTest(new ArrayList<>(globalVariables.tableCardsList.get(j).subList(0, gameState)));
                     tableWinTest.handCheck();
                     if (tableWinTest.player.handValue == tableStrength && opponentAction.equals(globalVariables.turnAction.get(j))) {
@@ -634,17 +660,34 @@ public class gettingData {
                 }
                 total++;
             }
-            sum += ((matching / total) * (getProbOfHandAtState(iWinTest.player.handValue)));
+            sum += ((matching / total) * (getProbOfHandAtState(a, gameState)));
         }
         return sum;
     }
 
-    public Double getProbOfHandAtState(Double handValue) {
+    public Double getProbOfHandAtState(Double handValue, Integer gameState) {
         double size = 0;
-        for (Integer value : globalVariables.probabilityOfHand.values()) {
+        HashMap<Double, Integer> temp = new HashMap<>();
+        switch (gameState){
+            case 0:
+                temp=globalVariables.probabilityOfHandPreFlop;
+                break;
+            case 3:
+                temp=globalVariables.probabilityOfHandFlop;
+                break;
+            case 4:
+                temp=globalVariables.probabilityOfHandTurn;
+                break;
+            case 5:
+                temp=globalVariables.probabilityOfHandRiver;
+        }
+        for (Integer value : temp.values()) {
             size += value;
         }
-        return globalVariables.probabilityOfHand.get(handValue) / size;
+        if (temp.get(handValue)==null){
+            Gdx.app.error("Value not found",""+handValue);
+        }
+        return temp.get(handValue) / size;
     }
 
 
@@ -766,8 +809,20 @@ public class gettingData {
                 case "tableCards":
                     globalVariables.tableCards = (ArrayList<String>) in.readObject();
                     break;
-                case "probabilityOfHand":
-                    globalVariables.probabilityOfHand=(HashMap<Double,Integer>) in.readObject();
+//                case "probabilityOfHand":
+//                    globalVariables.probabilityOfHand=(HashMap<Double,Integer>) in.readObject();
+//                    break;
+                case "probabilityOfHandPreFlop":
+                    globalVariables.probabilityOfHandPreFlop=(HashMap<Double,Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandFlop":
+                    globalVariables.probabilityOfHandFlop=(HashMap<Double,Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandTurn":
+                    globalVariables.probabilityOfHandTurn=(HashMap<Double,Integer>) in.readObject();
+                    break;
+                case "probabilityOfHandRiver":
+                    globalVariables.probabilityOfHandRiver=(HashMap<Double,Integer>) in.readObject();
             }
             in.close();
         } catch (IOException i) {
