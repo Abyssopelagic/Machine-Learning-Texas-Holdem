@@ -49,7 +49,7 @@ public class decisionState {
         probWinTurn = probAndSave.getWinProb(handValue, "turn");
         probWinRiver = probAndSave.getWinProb(handValue, "river");
 
-        //System.out.println("Computer Cards: " + computer.hand.get(0).value + " of " + computer.hand.get(0).suit + ", " + computer.hand.get(1).value + " of " + computer.hand.get(1).suit);
+        System.out.println("Computer Cards: " + computer.hand.get(0).value + " of " + computer.hand.get(0).suit + ", " + computer.hand.get(1).value + " of " + computer.hand.get(1).suit);
 
         if (globalVariables.smallBlind.equals("computer") && globalVariables.cardState.equals("preflop") && globalVariables.playState.equals("")) {
 
