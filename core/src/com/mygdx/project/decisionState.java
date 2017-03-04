@@ -2,6 +2,7 @@ package com.mygdx.project;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Keenan Baynard on 1/5/2017.
@@ -48,11 +49,11 @@ public class decisionState {
         probWinTurn = probAndSave.getWinProb(handValue, "turn");
         probWinRiver = probAndSave.getWinProb(handValue, "river");
 
-        System.out.println("Computer Cards: " + computer.hand.get(0).value + " of " + computer.hand.get(0).suit + ", " + computer.hand.get(1).value + " of " + computer.hand.get(1).suit);
+        //System.out.println("Computer Cards: " + computer.hand.get(0).value + " of " + computer.hand.get(0).suit + ", " + computer.hand.get(1).value + " of " + computer.hand.get(1).suit);
 
         if (globalVariables.smallBlind.equals("computer") && globalVariables.cardState.equals("preflop") && globalVariables.playState.equals("")) {
 
-        } else if (table.size()!=0){
+        } else if (table.size() != 0) {
             getData.handStrengthGivenTableStrengthAndAction(winTest.player.handValue, globalVariables.playState, globalVariables.cardState);
             playerHandValueProbGuess = getData.handProbabilityMap.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
             System.out.println(globalVariables.cardState + " probable Hand: " + playerHandValueProbGuess);
@@ -122,18 +123,12 @@ public class decisionState {
                 if (!globalVariables.smallBlind.equals("computer") || globalVariables.smallBlind.equals("computer") && globalVariables.cardState.equals("preflop") && !globalVariables.playState.equals("")) {
                     switch (globalVariables.playState) {
                         case "raise":
-                            if (probWinPreFlop > 0.5)
-                                if (globalVariables.betAmount > 100 && globalVariables.betAmount < 400) {
-                                    call();
-                                    globalVariables.cardState = "flop";
-                                } else if (globalVariables.betAmount >= 400)
-                                    fold();
-                                else
-                                    raise(probWinPreFlop);
+                            if (probWinPreFlop > 0.8) {
+                                raise(probWinPreFlop);
                                 //player turn again
-                            else if (globalVariables.betAmount > 100)
+                            } else if (probWinPreFlop < 0.2) {
                                 fold();
-                            else {
+                            } else {
                                 call();
                                 globalVariables.cardState = "flop";
                             }
@@ -148,12 +143,12 @@ public class decisionState {
                             break;
                         case "":
                             //check
-                            if (probWinPreFlop < 0.6) {
+                            if (probWinPreFlop < 0.5) {
                                 check();
                                 globalVariables.cardState = "flop";
                             }
                             //raise
-                            if (probWinFlop >= 0.6) {
+                            if (probWinPreFlop >= 0.5) {
                                 raise(probWinPreFlop);
                             }
                             break;
@@ -187,8 +182,7 @@ public class decisionState {
                     case "0/1":
                         if (globalVariables.playState.equals("raise")) {
                             call();
-                            globalVariables.cardState = "turn";
-                            globalVariables.numberOfRaises = 0;
+                            globalVariables.cardState="end";
                         } else {
                             check();
                             if (globalVariables.smallBlind.equals("computer")) {
@@ -201,10 +195,9 @@ public class decisionState {
                             if (globalVariables.numberOfRaises < 1) {
                                 call();
                                 globalVariables.cardState = "turn";
-                                globalVariables.numberOfRaises = 0;
+
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
                             }
                         } else {
                             raise(probWin);
@@ -214,12 +207,14 @@ public class decisionState {
                     case "2/3":
                         if (globalVariables.playState.equals("raise")) {
                             if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
                                 call();
                                 globalVariables.cardState = "turn";
-                                globalVariables.numberOfRaises = 0;
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
+
                             }
                         } else {
                             if (globalVariables.numberOfRaises < 1) {
@@ -231,12 +226,14 @@ public class decisionState {
                     case "3/4":
                         if (globalVariables.playState.equals("raise")) {
                             if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
                                 call();
                                 globalVariables.cardState = "turn";
-                                globalVariables.numberOfRaises = 0;
+
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
                             }
                         } else {
                             if (globalVariables.numberOfRaises < 2) {
@@ -262,8 +259,7 @@ public class decisionState {
                     case "0/1":
                         if (globalVariables.playState.equals("raise")) {
                             call();
-                            globalVariables.cardState = "river";
-                            globalVariables.numberOfRaises = 0;
+                            globalVariables.cardState="end";
                         } else {
                             check();
                             if (globalVariables.smallBlind.equals("computer")) {
@@ -276,10 +272,9 @@ public class decisionState {
                             if (globalVariables.numberOfRaises < 1) {
                                 call();
                                 globalVariables.cardState = "river";
-                                globalVariables.numberOfRaises = 0;
+
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
                             }
                         } else {
                             raise(probWin);
@@ -289,12 +284,14 @@ public class decisionState {
                     case "2/3":
                         if (globalVariables.playState.equals("raise")) {
                             if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
                                 call();
                                 globalVariables.cardState = "river";
-                                globalVariables.numberOfRaises = 0;
+
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
                             }
                         } else {
                             if (globalVariables.numberOfRaises < 1) {
@@ -306,12 +303,14 @@ public class decisionState {
                     case "3/4":
                         if (globalVariables.playState.equals("raise")) {
                             if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
                                 call();
                                 globalVariables.cardState = "river";
-                                globalVariables.numberOfRaises = 0;
+
                             } else {
                                 fold();
-                                globalVariables.numberOfRaises = 0;
                             }
                         } else {
                             if (globalVariables.numberOfRaises < 2) {
@@ -322,7 +321,88 @@ public class decisionState {
                         break;
                 }
                 break;
-//            case "flop":
+            case "river":
+                switch (bettingStrategy) {
+                    case "0/0":
+                        if (globalVariables.playState.equals("raise")) {
+                            fold();
+                        } else {
+                            check();
+                            if (globalVariables.smallBlind.equals("computer")) {
+                                globalVariables.cardState = "end";
+                            }
+                        }
+                        break;
+                    case "0/1":
+                        if (globalVariables.playState.equals("raise")) {
+                            call();
+                            globalVariables.cardState="end";
+                        } else {
+                            check();
+                            if (globalVariables.smallBlind.equals("computer")) {
+                                globalVariables.cardState = "end";
+                            }
+                        }
+                        break;
+                    case "1/2":
+                        if (globalVariables.playState.equals("raise")) {
+                            if (globalVariables.numberOfRaises < 1) {
+                                call();
+                                globalVariables.cardState = "end";
+
+                            } else {
+                                fold();
+
+                            }
+                        } else {
+                            raise(probWin);
+                            globalVariables.numberOfRaises++;
+                        }
+                        break;
+                    case "2/3":
+                        if (globalVariables.playState.equals("raise")) {
+                            if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
+                                call();
+                                globalVariables.cardState = "end";
+
+                            } else {
+                                fold();
+
+                            }
+                        } else {
+                            if (globalVariables.numberOfRaises < 1) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            }
+                        }
+                        break;
+                    case "3/4":
+                        if (globalVariables.playState.equals("raise")) {
+                            if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            } else if (globalVariables.numberOfRaises == 2) {
+                                call();
+                                globalVariables.cardState = "end";
+
+                            } else {
+                                fold();
+
+                            }
+                        } else {
+                            if (globalVariables.numberOfRaises < 2) {
+                                raise(probWin);
+                                globalVariables.numberOfRaises++;
+                            }
+                        }
+                        break;
+                }
+                break;
+        }
+        //            case "flop":
 //                switch (globalVariables.playState) {
 //                    case ("raise"):
 //                        //raise
@@ -413,54 +493,7 @@ public class decisionState {
 //                        }
 //                        break;
 //                }
-//                break;
-            case "river":
-                switch (globalVariables.playState) {
-                    case ("raise"):
-                        //raise
-                        if (probWinFlop >= .7) {
-                            if (globalVariables.betAmount > 100 && globalVariables.betAmount < 400) {
-                                call();
-                                globalVariables.cardState = "end";
-                            } else if (globalVariables.betAmount >= 400)
-                                fold();
-                            else
-                                raise(probWinRiver);
-                        }
-                        //call
-                        else if (probWinFlop >= .5) {
-                            call();
-                            globalVariables.cardState = "end";
-                        }
-                        //fold
-                        else if (probWinFlop < .5) {
-                            fold();
-                        }
-                        break;
-                    case ("check"):
-                        //raise
-                        if (probWinFlop >= .5) {
-                            raise(probWinRiver);
-                        }
-                        //check
-                        else if (probWinFlop < .5) {
-                            check();
-                            globalVariables.cardState = "end";
-                        }
-                        break;
-                    case "":
-                        //raise
-                        if (probWinFlop >= .5) {
-                            raise(probWinRiver);
-                        }
-                        //check
-                        else if (probWinFlop < .5) {
-                            check();
-                        }
-                        break;
-                }
-                break;
-        }
+//                end"
     }
 
 
@@ -470,11 +503,15 @@ public class decisionState {
         globalVariables.playState = "call";
         globalVariables.computerAction = "call";
         globalVariables.betAmount = 0;
+        globalVariables.numberOfCalls = 0;
+        globalVariables.numberOfRaises = 0;
     }
 
     public void fold() {
         globalVariables.playState = "fold";
         globalVariables.computerAction = "fold";
+        globalVariables.numberOfCalls = 0;
+        globalVariables.numberOfRaises = 0;
     }
 
     public void check() {
@@ -488,7 +525,14 @@ public class decisionState {
     }
 
     public void raise(double probwin) {
-        double amount = ((probwin * computer.playerMoney)) - ((1 - probwin) * globalVariables.potValue);
+        double amount = (Math.round((probwin * computer.playerMoney) / 10.0) * 10) / 10;
+        if (amount > player.playerMoney || amount > computer.playerMoney) {
+            if (player.playerMoney > computer.playerMoney) {
+                amount = player.playerMoney - globalVariables.betAmount;
+            } else {
+                amount = computer.playerMoney - globalVariables.betAmount;
+            }
+        }
         double playerbet = globalVariables.betAmount;
         globalVariables.betAmount = amount;
         globalVariables.computerAction = "raise $" + amount;
