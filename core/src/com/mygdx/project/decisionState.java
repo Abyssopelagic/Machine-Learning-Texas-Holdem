@@ -259,7 +259,7 @@ public class decisionState {
                     case "0/1":
                         if (globalVariables.playState.equals("raise")) {
                             call();
-                            globalVariables.cardState="end";
+                            globalVariables.cardState="river";
                         } else {
                             check();
                             if (globalVariables.smallBlind.equals("computer")) {
