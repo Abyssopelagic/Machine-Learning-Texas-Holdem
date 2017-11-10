@@ -643,14 +643,9 @@ public class gettingData {
         for (Double a : as) {
             for (int j = 0; j < globalVariables.playerCardsList.size(); j++) {
                 ArrayList<Card> temp = new ArrayList<>();
-                //ArrayList<Card> temp2 = new ArrayList<>();
                 temp.addAll(globalVariables.playerCardsList.get(j));
                 temp.addAll(globalVariables.tableCardsList.get(j).subList(0, gameState));
-                //temp2.addAll(globalVariables.playerCardsList.get(i));
-                //temp2.addAll(globalVariables.tableCardsList.get(i).subList(0,gameState));
                 handWinTest = new winTest(temp);
-                //iWinTest = new winTest(temp2);
-                //iWinTest.handCheck();
                 handWinTest.handCheck();
                 if (handWinTest.player.handValue == a) {
                     tableWinTest = new winTest(new ArrayList<>(globalVariables.tableCardsList.get(j).subList(0, gameState)));
